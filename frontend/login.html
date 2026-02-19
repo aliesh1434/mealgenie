@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MealGenie - Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen flex items-center justify-center px-4">
+
+<!-- Success Toast -->
+<div id="successToast" class="fixed top-6 inset-x-0 flex justify-center z-50 hidden">
+  <div class="bg-green-600 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2 text-sm">
+    <span class="text-lg">✔</span>
+    <span id="successToastMsg">Login successful!</span>
+  </div>
+</div>
+
+<div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-10 transform transition duration-300 hover:shadow-3xl">
+  
+  <!-- Logo -->
+  <div class="flex justify-center mb-6">
+    <img src="assets/mealgenie_logo.png" class="h-20 object-contain" alt="MealGenie">
+  </div>
+
+  <h2 class="text-4xl font-bold text-center text-gray-900 mb-4">
+    Login to Your Account
+  </h2>
+  <p class="text-center text-gray-600 mb-8">
+    Log in to continue your cooking journey!
+  </p>
+
+  <!-- Email -->
+  <div class="mb-5">
+    <label class="text-gray-700 font-semibold mb-1 block">Email</label>
+    <input
+      id="email"
+      type="email"
+      class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-600 focus:outline-none"
+      placeholder="Enter your email"
+    />
+  </div>
+
+  <!-- Password -->
+  <div class="mb-4">
+    <label class="text-gray-700 font-semibold mb-1 block">Password</label>
+    <div class="relative">
+      <input
+        id="password"
+        type="password"
+        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-600 focus:outline-none pr-11"
+        placeholder="Enter your password"
+      />
+      <button
+        type="button"
+        onclick="togglePassword('password', 'pwdEye')"
+        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+      >
+        <span id="pwdEye">👁️</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Forgot Password -->
+  <div class="flex justify-end mb-4">
+    <a href="forgot.html" class="text-sm text-green-600 font-semibold hover:underline">
+      Forgot your password?
+    </a>
+  </div>
+
+  <!-- Login Button -->
+  <button
+    id="loginBtn"
+    onclick="loginUser()"
+    class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold text-lg transition transform hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2"
+  >
+    <span id="loginBtnSpinner" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+    <span id="loginBtnText">Log In</span>
+  </button>
+
+  <!-- Error Message -->
+  <p id="result" class="text-center text-red-500 font-semibold mt-4 text-sm"></p>
+
+  <!-- Divider -->
+  <div class="flex items-center my-6">
+    <div class="flex-1 h-px bg-gray-200"></div>
+    <span class="px-3 text-gray-400 text-sm">or</span>
+    <div class="flex-1 h-px bg-gray-200"></div>
+  </div>
+
+  <!-- Google Login Button (UI only) -->
+  <button
+    type="button"
+    onclick="googleLogin()"
+    class="w-full border-2 border-gray-200 hover:border-green-600 text-gray-700 py-3 rounded-xl font-semibold flex items-center justify-center gap-3 transition bg-white"
+  >
+    <img
+      src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+      alt="Google"
+      class="w-5 h-5"
+    />
+    <span>Continue with Google</span>
+  </button>
+
+  <!-- Register link -->
+  <p class="text-center text-gray-700 text-sm mt-6">
+    Don’t have an account?
+    <a href="register.html" class="text-green-600 font-semibold hover:underline">
+      Register here
+    </a>
+  </p>
+
+</div>
+
+<script>
+function togglePassword(inputId, eyeId) {
+  const input = document.getElementById(inputId);
+  const eye = document.getElementById(eyeId);
+  if (input.type === "password") {
+    input.type = "text";
+    eye.textContent = "🙈";
+  } else {
+    input.type = "password";
+    eye.textContent = "👁️";
+  }
+}
+
+function showSuccessToast(message) {
+  const toast = document.getElementById("successToast");
+  const msg = document.getElementById("successToastMsg");
+  msg.textContent = message;
+  toast.classList.remove("hidden");
+  setTimeout(() => {
+    toast.classList.add("hidden");
+  }, 1500);
+}
+
+function setLoading(isLoading) {
+  const btn = document.getElementById("loginBtn");
+  const spinner = document.getElementById("loginBtnSpinner");
+  const text = document.getElementById("loginBtnText");
+  if (isLoading) {
+    btn.disabled = true;
+    spinner.classList.remove("hidden");
+    text.textContent = "Logging in...";
+  } else {
+    btn.disabled = false;
+    spinner.classList.add("hidden");
+    text.textContent = "Log In";
+  }
+}
+
+async function loginUser() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const resultBox = document.getElementById("result");
+
+  resultBox.textContent = "";
+
+  if (!email || !password) {
+    resultBox.textContent = "Please enter both email and password.";
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const res = await fetch("http://localhost:5000/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (res.status === 200) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("name", data.name);
+      localStorage.setItem("email", data.email);
+
+      showSuccessToast("Login successful! Redirecting...");
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 900);
+    } else {
+      resultBox.textContent = data.message || "Login failed";
+    }
+  } catch (err) {
+    console.error(err);
+    resultBox.textContent = "Server error. Try again later.";
+  } finally {
+    setLoading(false);
+  }
+}
+
+function googleLogin() {
+  alert("Google Login integration coming soon ✨");
+}
+</script>
+
+</body>
+</html>

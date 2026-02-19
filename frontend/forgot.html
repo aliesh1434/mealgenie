@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MealGenie - Forgot Password</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen flex items-center justify-center px-4">
+
+<!-- Success Toast -->
+<div id="successToast" class="fixed top-6 inset-x-0 flex justify-center z-50 hidden">
+  <div class="bg-green-600 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2 text-sm">
+    <span class="text-lg">✔</span>
+    <span id="successToastMsg">Reset link sent!</span>
+  </div>
+</div>
+
+<div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-10 transform transition duration-300 hover:shadow-3xl">
+
+  <!-- Logo -->
+  <div class="flex justify-center mb-6">
+    <img src="assets/mealgenie_logo.png" class="h-20 object-contain" alt="MealGenie">
+  </div>
+
+  <h2 class="text-4xl font-bold text-center text-gray-900 mb-3">
+    Forgot Password?
+  </h2>
+  <p class="text-center text-gray-600 mb-8">
+    Enter your registered email to receive a reset link.
+  </p>
+
+  <!-- Email Input -->
+  <div class="mb-6">
+    <label class="text-gray-700 font-semibold mb-1 block">Email</label>
+    <input
+      id="email"
+      type="email"
+      class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-600 focus:outline-none"
+      placeholder="Enter your registered email"
+    />
+  </div>
+
+  <!-- Submit Button -->
+  <button
+    id="sendBtn"
+    onclick="sendLink()"
+    class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold text-lg transition transform hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2"
+  >
+    <span id="sendBtnSpinner" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+    <span id="sendBtnText">Send Reset Link</span>
+  </button>
+
+  <!-- Status Message -->
+  <p id="msg" class="text-center text-red-500 font-semibold mt-4 text-sm"></p>
+
+  <!-- Back to Login -->
+  <p class="text-center text-gray-700 text-sm mt-6">
+    Remembered your password?
+    <a href="login.html" class="text-green-600 font-semibold hover:underline">
+      Go back to Login
+    </a>
+  </p>
+
+</div>
+
+<script>
+function setLoading(isLoading) {
+  const btn = document.getElementById("sendBtn");
+  const spinner = document.getElementById("sendBtnSpinner");
+  const text = document.getElementById("sendBtnText");
+
+  if (isLoading) {
+    btn.disabled = true;
+    spinner.classList.remove("hidden");
+    text.textContent = "Sending...";
+  } else {
+    btn.disabled = false;
+    spinner.classList.add("hidden");
+    text.textContent = "Send Reset Link";
+  }
+}
+
+function showSuccessToast(message) {
+  const toast = document.getElementById("successToast");
+  const msg = document.getElementById("successToastMsg");
+  msg.textContent = message;
+  toast.classList.remove("hidden");
+  setTimeout(() => {
+    toast.classList.add("hidden");
+  }, 1800);
+}
+
+async function sendLink() {
+  const email = document.getElementById("email").value.trim();
+  const msgBox = document.getElementById("msg");
+  msgBox.textContent = "";
+
+  if (!email) {
+    msgBox.textContent = "Please enter your email.";
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const res = await fetch("http://localhost:5000/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+
+    if (res.status === 200) {
+      showSuccessToast("Reset link sent!");
+      msgBox.style.color = "green";
+      msgBox.textContent = data.message;
+    } else {
+      msgBox.style.color = "red";
+      msgBox.textContent = data.message || "Failed to send link.";
+    }
+
+  } catch (err) {
+    msgBox.style.color = "red";
+    msgBox.textContent = "Server error, try again later.";
+  } finally {
+    setLoading(false);
+  }
+}
+</script>
+
+</body>
+</html>

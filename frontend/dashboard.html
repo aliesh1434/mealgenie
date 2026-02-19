@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MealGenie Dashboard</title>
+
+  <!-- Tailwind + Chart + Quagga -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/quagga@0.12.1/dist/quagga.min.js"></script>
+
+  <style>
+    .shimmer {
+      animation: shimmer 1.8s infinite;
+      background: linear-gradient(90deg, #eee, #ddd, #eee);
+      background-size: 200% 100%;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+
+<script>
+  if (!localStorage.getItem("token")) {
+    window.location.href = "login.html";
+  }
+</script>
+
+<!-- NAVBAR (similar style to landing page) -->
+<nav class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+
+      <!-- Logo -->
+      <div class="flex items-center space-x-3">
+        <img src="assets/mealgenie_logo.png" alt="MealGenie" class="h-10 w-auto object-contain" />
+        <span class="text-xl font-bold text-gray-900">MealGenie</span>
+      </div>
+
+      <!-- Simple nav links -->
+      <div class="hidden md:flex items-center space-x-6 text-sm">
+        <a href="#pantrySection" class="text-gray-700 hover:text-green-600">Pantry</a>
+        <a href="#grocerySection" class="text-gray-700 hover:text-green-600">Grocery</a>
+        <a href="#aiSection" class="text-gray-700 hover:text-green-600">AI Recipes</a>
+        <a href="#nutritionSection" class="text-gray-700 hover:text-green-600">Nutrition</a>
+      </div>
+
+      <!-- User + logout -->
+      <div class="flex items-center space-x-4">
+        <span id="navUser" class="hidden sm:block text-xs sm:text-sm text-gray-600"></span>
+        <button onclick="logout()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700">
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- Welcome + stats -->
+  <section class="mb-8">
+    <h2 class="text-3xl font-bold text-gray-900">
+      Welcome, <span id="username"></span> 👋
+    </h2>
+    <p class="text-gray-600 mt-2 text-sm">
+      Here’s your cooking overview for today.
+    </p>
+  </section>
+
+  <!-- Stats cards -->
+  <section class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+
+  <!-- Recipes Cooked -->
+  <div class="bg-gradient-to-br from-green-600 to-emerald-600 text-white p-6 rounded-2xl shadow-xl">
+    <p class="text-sm opacity-90">Recipes Cooked</p>
+    <p id="statRecipesCooked" class="text-4xl font-bold mt-1">0</p>
+    <p class="text-xs mt-2 opacity-80">This month</p>
+  </div>
+
+  <!-- Food Waste Saved -->
+  <div class="bg-white p-6 rounded-2xl shadow border border-green-100">
+    <p class="text-sm text-gray-500 mb-1">Food Waste Saved</p>
+    <p id="statWasteSaved" class="text-4xl font-bold text-green-700">0 kg</p>
+    <p class="text-xs text-green-600 mt-2">Reducing waste 🌍</p>
+  </div>
+
+  <!-- Saved Recipes -->
+  <div class="bg-white p-6 rounded-2xl shadow border border-blue-100">
+    <p class="text-sm text-gray-500 mb-1">Saved Recipes</p>
+    <p id="statSavedRecipes" class="text-4xl font-bold text-green-700">0</p>
+    <p class="text-xs text-blue-600 mt-2">Loved dishes 🍽️</p>
+  </div>
+
+</section>
+
+  
+  <!-- Profile card -->
+  <section class="bg-white rounded-2xl shadow p-6 mb-10">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+      <div id="profileAvatar" class="w-16 h-16 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-2xl font-bold">
+        ?
+      </div>
+      <div class="flex-1">
+        <p id="profileNameDisplay" class="text-lg font-bold text-gray-900">Your Name</p>
+        <p id="profileEmailDisplay" class="text-sm text-gray-600">you@example.com</p>
+      </div>
+      <button onclick="toggleEditBox()" class="mt-2 sm:mt-0 text-sm text-green-600 font-semibold">
+        Edit Profile ✏️
+      </button>
+    </div>
+    
+    <div id="editBox" class="hidden mt-4 border-t pt-4">
+      <label class="text-xs text-gray-600 mb-1 block">Name</label>
+      <input
+      id="profileNameInput"
+      class="w-full border rounded-lg px-3 py-2 text-sm mb-2 focus:outline-none focus:ring-1 focus:ring-green-500"
+      placeholder="Enter new name"
+      />
+      <button
+      onclick="updateProfileName()"
+      class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700"
+      >
+      Save Name
+    </button>
+    <p id="profileMsg" class="text-xs text-gray-600 mt-2"></p>
+  </div>
+  </section>
+  
+  <!-- Pantry + Grocery -->
+  <section id="pantrySection" class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+    
+    <!-- Pantry -->
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold text-gray-900">Your Pantry</h3>
+        <span class="text-xs text-gray-500">Track what you already have</span>
+      </div>
+      
+      <div class="flex flex-wrap gap-2 mb-4">
+        <input id="p_name" class="flex-1 min-w-[130px] border rounded-lg px-3 py-2 text-sm" placeholder="Item name">
+        <input id="p_qty" class="w-24 border rounded-lg px-3 py-2 text-sm" placeholder="Qty">
+        <input id="p_exp" class="w-32 border rounded-lg px-3 py-2 text-sm" placeholder="Expiry (optional)">
+        <button onclick="addPantry()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700">
+          Add
+        </button>
+      </div>
+      
+      <div id="pantryList" class="space-y-2 text-sm max-h-80 overflow-y-auto">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+    
+    <!-- Grocery -->
+    <div id="grocerySection" class="bg-white p-6 rounded-2xl shadow">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold text-gray-900">Grocery List</h3>
+        <span class="text-xs text-gray-500">Auto-add via barcode 📷</span>
+      </div>
+      
+      <div class="flex flex-wrap gap-2 mb-4">
+        <input id="g_name" class="flex-1 min-w-[130px] border rounded-lg px-3 py-2 text-sm" placeholder="Item name">
+        <input id="g_qty" class="w-24 border rounded-lg px-3 py-2 text-sm" placeholder="Qty">
+        <button onclick="addGrocery()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700">
+          Add
+        </button>
+      </div>
+      
+      <div id="groceryList" class="space-y-2 text-sm max-h-80 overflow-y-auto">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </section>
+  
+<!-- AI Smart Suggestions -->
+<section class="mb-10">
+  <div class="bg-white p-6 rounded-2xl shadow">
+    
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="text-xl font-bold text-purple-700">
+        🔮 AI Smart Suggestions
+      </h3>
+
+      
+    </div>
+
+    <p class="text-gray-600 text-sm mb-4">
+      Based on pantry inventory & expiry dates
+    </p>
+
+    <!-- Suggestions -->
+    <div id="aiSug"
+      class="bg-purple-50 border border-purple-200 rounded-xl p-4 space-y-2 text-sm font-semibold text-gray-700 min-h-[80px] flex flex-col justify-center text-center">
+      Loading suggestions...
+    </div>
+
+  </div>
+</section>
+
+  
+  
+  
+  <!-- AI Recipe Search + Side-by-side image layout + animation -->
+  <section id="aiSection" class="mb-10">
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h3 class="text-xl font-bold text-green-700 mb-2">🔍 AI Recipe Search</h3>
+      <p class="text-gray-600 text-sm mb-4">
+        Type any dish or idea, and MealGenie will generate a full recipe + AI image.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-3 mb-4">
+        <input
+          id="recipeQuery"
+          class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-green-500"
+          placeholder="e.g., spicy paneer wrap, high-protein breakfast, veg pulao..."
+        />
+        <button
+          id="searchBtn"
+          onclick="searchRecipes(event)"
+          class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-semibold"
+        >
+          ✨ Search Recipe
+        </button>
+      </div>
+
+      <!-- AI result card -->
+      <div id="aiRecipeResult" class="mt-4 hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 fade-in-up">
+          <!-- Text side -->
+          <div>
+            <h4 id="aiRecipeTitle" class="text-lg font-bold text-gray-900 mb-2"></h4>
+            <p id="aiRecipeDesc" class="text-sm text-gray-700 mb-3"></p>
+            <pre
+              id="aiRecipeText"
+              class="text-xs bg-gray-50 border border-gray-100 p-3 rounded-lg overflow-x-auto whitespace-pre-wrap max-h-72"
+            ></pre>
+
+            <div class="mt-3 flex flex-wrap gap-3">
+              <button
+                id="saveRecipeBtn"
+                class="hidden bg-orange-500 text-white px-4 py-2 rounded-lg text-xs sm:text-sm"
+                onclick="saveRecipe()"
+              >
+                📌 Save Recipe
+              </button>
+              <button
+                onclick="openRecipeModal()"
+                id="viewFullBtn"
+                class="hidden border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-xs sm:text-sm hover:bg-gray-50"
+              >
+                👀 View Full Recipe
+              </button>
+            </div>
+          </div>
+
+          <!-- Image side with loader -->
+          <div class="flex flex-col items-center justify-center">
+            <div id="aiImageLoader" class="w-full h-64 rounded-2xl bg-gray-100 shimmer hidden"></div>
+            <img
+              id="aiRecipeImage"
+              class="rounded-2xl shadow-lg max-h-64 w-full object-cover hidden"
+              alt="AI generated dish"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nutrition chart -->
+  <section id="nutritionSection" class="mb-10">
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h3 class="text-xl font-bold text-green-700 mb-4">🍎 Daily Nutrition Tracker</h3>
+      <p class="text-xs text-gray-500 mb-2">
+        Auto-refreshing every 10 seconds with your latest data.
+      </p>
+      <canvas id="nutritionChart"></canvas>
+    </div>
+  </section>
+
+  <!-- Barcode Scanner -->
+  <section class="mb-10">
+    <div class="bg-white p-6 rounded-2xl shadow">
+      <h3 class="text-lg font-bold text-gray-900 mb-2">📷 Smart Barcode Scanner</h3>
+      <p class="text-sm text-gray-600 mb-4">
+        Scan a product barcode to auto-add it to your grocery list.
+      </p>
+      <button
+        onclick="startScanner()"
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700"
+      >
+        Start Scanner
+      </button>
+      <video id="scanner" class="w-full mt-3 rounded-xl"></video>
+    </div>
+  </section>
+
+</main>
+
+<!-- Recipe Modal (for “View Full Recipe”) -->
+<div
+  id="recipeModal"
+  class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden"
+>
+  <div class="bg-white max-w-2xl w-full mx-4 rounded-2xl shadow-2xl p-6 relative">
+    <button
+      onclick="closeRecipeModal()"
+      class="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+    >
+      ✕
+    </button>
+    <h3 id="modalTitle" class="text-xl font-bold text-gray-900 mb-2"></h3>
+    <p id="modalDesc" class="text-sm text-gray-600 mb-3"></p>
+    <pre
+      id="modalText"
+      class="text-xs bg-gray-50 border border-gray-100 p-3 rounded-lg overflow-x-auto whitespace-pre-wrap max-h-96"
+    ></pre>
+  </div>
+</div>
+
+<script>
+/***********************
+  GLOBAL USER DATA
+************************/
+const token = localStorage.getItem("token");
+if (!token) window.location.href = "login.html";
+
+document.getElementById("username").innerText =
+  localStorage.getItem("name") || "Chef";
+document.getElementById("navUser").innerText =
+  localStorage.getItem("email") || "";
+
+/***********************
+  PROFILE
+************************/
+async function loadProfile() {
+  try {
+    const res = await fetch("http://localhost:5000/me", {
+      headers: { Authorization: "Bearer " + token },
+    });
+
+    const user = await res.json();
+    const name = user.name || "Chef";
+    const email = user.email || "";
+
+    document.getElementById("profileNameDisplay").innerText = name;
+    document.getElementById("profileEmailDisplay").innerText = email;
+    document.getElementById("profileNameInput").value = name;
+    document.getElementById("username").innerText = name;
+    document.getElementById("navUser").innerText = email;
+    document.getElementById("profileAvatar").innerText =
+      name.charAt(0).toUpperCase();
+
+  } catch (err) {
+    console.log("Profile error:", err);
+  }
+}
+
+function toggleEditBox() {
+  document.getElementById("editBox").classList.toggle("hidden");
+}
+
+async function updateProfileName() {
+  const newName = document.getElementById("profileNameInput").value.trim();
+  if (!newName) return;
+
+  const res = await fetch("http://localhost:5000/me", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify({ name: newName }),
+  });
+
+  const data = await res.json();
+  document.getElementById("profileNameDisplay").innerText = data.name;
+  document.getElementById("username").innerText = data.name;
+  document.getElementById("profileAvatar").innerText =
+    data.name.charAt(0).toUpperCase();
+  localStorage.setItem("name", data.name);
+
+  document.getElementById("profileMsg").innerText =
+    "Name updated successfully!";
+}
+
+/***********************
+  PANTRY
+************************/
+async function fetchPantry() {
+  const res = await fetch("http://localhost:5000/pantry", {
+    headers: { Authorization: "Bearer " + token },
+  });
+  const data = await res.json();
+
+  const box = document.getElementById("pantryList");
+  box.innerHTML = "";
+
+  data.forEach((item) => {
+    const div = document.createElement("div");
+    div.className =
+      "flex justify-between items-center border rounded-lg px-3 py-2 hover:bg-gray-50 text-sm";
+
+    div.innerHTML = `
+      <div>
+        <p class="font-semibold">${item.name} <span class="text-gray-500">(${item.quantity})</span></p>
+        ${
+          item.expiresAt
+            ? `<p class="text-xs text-gray-500">Expires: ${new Date(
+                item.expiresAt
+              ).toLocaleDateString()}</p>`
+            : ""
+        }
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="showNutrition('${item.name}')" class="text-blue-600 text-xs">Nutrition</button>
+        <button onclick="deletePantry('${item._id}')" class="text-red-600 text-xs">Delete</button>
+      </div>
+    `;
+
+    box.appendChild(div);
+  });
+}
+
+async function addPantry() {
+  const name = document.getElementById("p_name").value.trim();
+  const qty = document.getElementById("p_qty").value.trim();
+  const exp = document.getElementById("p_exp").value.trim();
+  if (!name || !qty) return;
+
+  await fetch("http://localhost:5000/pantry", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify({ name, quantity: qty, expiresAt: exp }),
+  });
+
+  fetchPantry();
+}
+
+async function deletePantry(id) {
+  await fetch(`http://localhost:5000/pantry/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: "Bearer " + token },
+  });
+  fetchPantry();
+}
+
+/***********************
+  GROCERY
+************************/
+async function fetchGrocery() {
+  const res = await fetch("http://localhost:5000/grocery", {
+    headers: { Authorization: "Bearer " + token },
+  });
+  const data = await res.json();
+
+  const box = document.getElementById("groceryList");
+  box.innerHTML = "";
+
+  data.forEach((item) => {
+    const div = document.createElement("div");
+    div.className =
+      "flex justify-between items-center border rounded-lg px-3 py-2 hover:bg-gray-50 text-sm";
+
+    div.innerHTML = `
+      <p class="font-semibold ${
+        item.bought ? "line-through text-gray-400" : ""
+      }">
+        ${item.name} <span class="text-gray-500">(${item.quantity})</span>
+      </p>
+      <div class="flex space-x-2 text-xs">
+        <button onclick="toggleGrocery('${item._id}')" class="text-green-600">
+          ${item.bought ? "Unmark" : "Bought"}
+        </button>
+        <button onclick="deleteGrocery('${item._id}')" class="text-red-600">Delete</button>
+      </div>
+    `;
+
+    box.appendChild(div);
+  });
+}
+
+async function addGrocery() {
+  const name = document.getElementById("g_name").value.trim();
+  const qty = document.getElementById("g_qty").value.trim() || "1";
+
+  if (!name) return;
+
+  await fetch("http://localhost:5000/grocery", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify({ name, quantity: qty }),
+  });
+
+  fetchGrocery();
+}
+
+async function toggleGrocery(id) {
+  await fetch(`http://localhost:5000/grocery/${id}/toggle`, {
+    method: "PATCH",
+    headers: { Authorization: "Bearer " + token },
+  });
+  fetchGrocery();
+}
+
+async function deleteGrocery(id) {
+  await fetch(`http://localhost:5000/grocery/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: "Bearer " + token },
+  });
+  fetchGrocery();
+}
+
+/***********************
+  AI SMART SUGGESTIONS
+************************/
+async function fetchAI() {
+  try {
+    const res = await fetch("http://localhost:5000/ai/suggest", {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token 
+      },
+      body: JSON.stringify({ query: "Give smart meal suggestions using pantry" })
+    });
+
+
+    const data = await res.json();
+    const box = document.getElementById("aiSug");
+    box.innerHTML = "";
+
+    (data.suggestions || []).forEach((s) => {
+      const div = document.createElement("div");
+      div.className =
+        "bg-purple-50 border border-purple-200 rounded-lg p-2 text-xs sm:text-sm";
+      div.innerText = s;
+      box.appendChild(div);
+    });
+  } catch (err) {
+    document.getElementById("aiSug").innerText =
+      "AI unavailable. Try again later.";
+  }
+}
+
+/***********************
+  AI RECIPE SEARCH
+************************/
+async function searchRecipes(event) {
+  const q = document.getElementById("recipeQuery").value.trim();
+  if (!q) return;
+
+  const btn = event.target;
+  btn.disabled = true;
+  btn.innerText = "Generating...";
+
+  const loader = document.getElementById("aiImageLoader");
+  const img = document.getElementById("aiRecipeImage");
+  loader.classList.remove("hidden");
+  img.classList.add("hidden");
+
+  try {
+    const res = await fetch("http://localhost:5000/ai/search", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({ query: q }),
+    });
+
+    const data = await res.json();
+
+    document.getElementById("aiRecipeResult").classList.remove("hidden");
+    document.getElementById("aiRecipeTitle").innerText =
+      data.title || "AI Recipe";
+    document.getElementById("aiRecipeDesc").innerText =
+      data.description || "";
+    document.getElementById("aiRecipeText").innerText = data.recipe || "";
+
+    loader.classList.add("hidden");
+  } catch (err) {
+    alert("AI failed. Check backend.");
+  }
+
+  btn.disabled = false;
+  btn.innerText = "✨ Search Recipe";
+}
+
+/***********************
+  SAVE RECIPE
+************************/
+async function saveRecipe() {
+  const title = document.getElementById("aiRecipeTitle").innerText;
+  const recipe = document.getElementById("aiRecipeText").innerText;
+
+  await fetch("http://localhost:5000/recipe/save", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify({ title, recipe }),
+  });
+
+  alert("Recipe saved!");
+}
+
+/***********************
+  NUTRITION
+************************/
+async function showNutrition(item) {
+  const res = await fetch("http://localhost:5000/nutrition", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify({ ingredient: item }),
+  });
+
+  const data = await res.json();
+  alert(`Calories: ${data.calories}, Protein: ${data.protein_g}g`);
+}
+
+/***********************
+  DASHBOARD STATS
+************************/
+async function loadDashboardStats() {
+  try {
+    const res = await fetch("http://localhost:5000/stats", {
+      headers: { Authorization: "Bearer " + token },
+    });
+
+    const s = await res.json();
+
+    document.getElementById("statRecipesCooked").innerText =
+      s.recipesCooked || 0;
+    document.getElementById("statSavedRecipes").innerText =
+      s.savedRecipes || 0;
+    document.getElementById("statWasteSaved").innerText =
+      (s.foodWasteSaved || 0).toFixed(1) + " kg";
+  } catch (err) {
+    console.log("Stats error:", err);
+  }
+}
+
+/***********************
+  LOGOUT
+************************/
+function logout() {
+  localStorage.clear();
+  window.location.href = "login.html";
+}
+
+/***********************
+  INIT
+************************/
+loadProfile();
+fetchPantry();
+fetchGrocery();
+fetchAI();
+loadDashboardStats();
+
+</script>
+
+</body>
+</html>

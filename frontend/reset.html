@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MealGenie - Reset Password</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen flex items-center justify-center px-4">
+
+<!-- Success Toast -->
+<div id="toastSuccess"
+  class="fixed top-6 inset-x-0 flex justify-center z-50 hidden transition">
+  <div class="bg-green-600 text-white px-5 py-3 rounded-full shadow-lg text-sm font-semibold">
+    ✔ Password Updated! Redirecting...
+  </div>
+</div>
+
+<div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-10">
+
+  <div class="flex justify-center mb-6">
+    <img src="assets/mealgenie_logo.png" class="h-20" alt="MealGenie">
+  </div>
+
+  <h2 class="text-4xl font-bold text-center text-gray-900 mb-3">
+    Reset Password 
+  </h2>
+  <p class="text-center text-gray-600 mb-8">
+    Enter a new password to secure your account.
+  </p>
+
+  <!-- New Password -->
+  <div class="mb-5">
+    <label class="text-gray-700 font-semibold mb-1 block">New Password</label>
+    <div class="relative">
+      <input id="password" type="password"
+        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-600 focus:outline-none"
+        placeholder="Enter new password">
+      <i onclick="toggle('password','eye1')"
+        id="eye1"
+        class="fas fa-eye absolute right-4 top-3.5 text-gray-500 cursor-pointer"></i>
+    </div>
+  </div>
+
+  <!-- Confirm Password -->
+  <div class="mb-6">
+    <label class="text-gray-700 font-semibold mb-1 block">Confirm Password</label>
+    <div class="relative">
+      <input id="confirmPassword" type="password"
+        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-600 focus:outline-none"
+        placeholder="Re-enter password">
+      <i onclick="toggle('confirmPassword','eye2')"
+        id="eye2"
+        class="fas fa-eye absolute right-4 top-3.5 text-gray-500 cursor-pointer"></i>
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <button id="resetBtn"
+    onclick="resetPassword()"
+    class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold text-lg
+           flex items-center justify-center gap-2 transition">
+    <span id="spinner" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+    <span>Update Password</span>
+  </button>
+
+  <p id="errorText" class="text-center text-red-500 font-semibold mt-4 text-sm"></p>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+<script>
+const token = new URLSearchParams(window.location.search).get("token");
+
+function toggle(id, icon){
+  const input = document.getElementById(id);
+  const eye = document.getElementById(icon);
+
+  if(input.type === "password"){
+    input.type = "text";
+    eye.classList.replace("fa-eye","fa-eye-slash");
+  } else {
+    input.type = "password";
+    eye.classList.replace("fa-eye-slash","fa-eye");
+  }
+}
+
+function setLoading(isLoading) {
+  const btn = document.getElementById("resetBtn");
+  const spinner = document.getElementById("spinner");
+
+  if(isLoading){
+    btn.disabled = true;
+    spinner.classList.remove("hidden");
+  } else {
+    btn.disabled = false;
+    spinner.classList.add("hidden");
+  }
+}
+
+async function resetPassword(){
+  const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+  const err = document.getElementById("errorText");
+
+  err.textContent = "";
+
+  if(!password || !confirmPassword){
+    err.textContent = "Fill both fields!";
+    return;
+  }
+  if(password !== confirmPassword){
+    err.textContent = "Passwords do not match!";
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const res = await fetch(`http://localhost:5000/reset-password/${token}`, {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ password })
+    });
+
+    const data = await res.json();
+
+    if(res.status === 200){
+      document.getElementById("toastSuccess").classList.remove("hidden");
+
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1800);
+    } else {
+      err.textContent = data.message || "Reset failed!";
+    }
+
+  } catch(e) {
+    err.textContent = "Server error!";
+  }
+
+  setLoading(false);
+}
+</script>
+
+</body>
+</html>

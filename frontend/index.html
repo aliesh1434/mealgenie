@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en" style="height: auto; min-height: 100%;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MealGenie - Smart Recipe Discovery & Meal Planning</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50" style="height: auto; min-height: 100%;">
+
+<nav class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+
+      <!-- LOGO -->
+      <div class="flex items-center space-x-3">
+        <img 
+          src="assets/mealgenie_logo.png" 
+          alt="MealGenie Logo"
+          class="h-12 w-12 object-contain"
+
+        />
+        <span class="text-2xl font-bold text-gray-900">MealGenie</span>
+      </div>
+
+      <!-- NAV LINKS -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#recipes" class="text-gray-700 hover:text-green-600 transition">Recipes</a>
+        <a href="#pantry" class="text-gray-700 hover:text-green-600 transition">Pantry</a>
+        <a href="#meal-plans" class="text-gray-700 hover:text-green-600 transition">Meal Plans</a>
+        <a href="#grocery" class="text-gray-700 hover:text-green-600 transition">Grocery</a>
+        <a href="#dashboard" class="text-gray-700 hover:text-green-600 transition">Dashboard</a>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="flex items-center space-x-4">
+        <a href="login.html" class="hidden md:block text-gray-700 hover:text-green-600 transition">
+  Log In
+</a>
+<a href="register.html" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+  Get Started
+</a>
+
+        <button class="md:hidden text-gray-700">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</nav>
+
+
+<section class="bg-gradient-to-br from-green-50 to-emerald-50 py-16 sm:py-20 lg:py-24">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid lg:grid-cols-2 gap-12 items-center">
+<div>
+<div class="inline-block bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+<i class="fas fa-sparkles mr-2"></i>AI-Powered Recipe Discovery
+</div>
+<h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">Cook Smarter, Waste Less, Live Better</h1>
+<p class="text-xl text-gray-600 mb-8">Discover personalized recipes based on what you have. Track your pantry, reduce food waste, and plan meals effortlessly with AI-powered suggestions.</p>
+<div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+<label class="block text-sm font-semibold text-gray-700 mb-3">What ingredients do you have?</label>
+<div class="flex flex-col sm:flex-row gap-3">
+<div class="flex-1 relative">
+<i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+<input type="text" placeholder="e.g., chicken, tomatoes, pasta..." class="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none text-gray-900">
+</div>
+<button class="bg-green-600 text-white px-8 py-4 rounded-xl hover:bg-green-700 transition font-semibold whitespace-nowrap">
+<i class="fas fa-magic mr-2"></i>Find Recipes
+</button>
+</div>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="text-xs text-gray-500">Popular:</span>
+<button class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-green-100 hover:text-green-700 transition">Chicken</button>
+<button class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-green-100 hover:text-green-700 transition">Pasta</button>
+<button class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-green-100 hover:text-green-700 transition">Vegetables</button>
+<button class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-green-100 hover:text-green-700 transition">Rice</button>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 text-sm text-gray-600">
+<div class="flex items-center">
+<i class="fas fa-check-circle text-green-600 mr-2"></i>
+<span>10,000+ Recipes</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-check-circle text-green-600 mr-2"></i>
+<span>AI-Powered Matching</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-check-circle text-green-600 mr-2"></i>
+<span>Zero Waste Goals</span>
+</div>
+</div>
+</div>
+<div class="relative">
+<img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&h=600&fit=crop" alt="Healthy cooking" class="rounded-2xl shadow-2xl w-full h-auto">
+<div class="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-xl p-4 hidden lg:block">
+<div class="flex items-center space-x-3">
+<div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+<i class="fas fa-leaf text-green-600 text-xl"></i>
+</div>
+<div>
+<div class="text-2xl font-bold text-gray-900">2.5kg</div>
+<div class="text-sm text-gray-600">Food Waste Saved</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="recipes" class="py-16 sm:py-20 bg-white">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-12">
+<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">AI-Powered Recipe Suggestions</h2>
+<p class="text-xl text-gray-600 max-w-3xl mx-auto">Get personalized recipe recommendations based on your dietary preferences, available ingredients, and cooking time.</p>
+</div>
+
+<div class="bg-gray-50 rounded-2xl p-6 mb-12">
+<div class="flex flex-wrap gap-4 items-center justify-between mb-6">
+<h3 class="text-lg font-semibold text-gray-900">Dietary Filters</h3>
+<button class="text-green-600 hover:text-green-700 text-sm font-semibold">Clear All</button>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+<button class="bg-white border-2 border-green-600 text-green-600 px-4 py-3 rounded-xl hover:bg-green-50 transition font-semibold text-sm">
+<i class="fas fa-leaf mr-2"></i>Vegetarian
+</button>
+<button class="bg-white border-2 border-gray-200 text-gray-700 px-4 py-3 rounded-xl hover:border-green-600 hover:text-green-600 transition font-semibold text-sm">
+<i class="fas fa-seedling mr-2"></i>Vegan
+</button>
+<button class="bg-white border-2 border-gray-200 text-gray-700 px-4 py-3 rounded-xl hover:border-green-600 hover:text-green-600 transition font-semibold text-sm">
+<i class="fas fa-wheat-awn mr-2"></i>Gluten-Free
+</button>
+<button class="bg-white border-2 border-gray-200 text-gray-700 px-4 py-3 rounded-xl hover:border-green-600 hover:text-green-600 transition font-semibold text-sm">
+<i class="fas fa-cheese mr-2"></i>Dairy-Free
+</button>
+<button class="bg-white border-2 border-gray-200 text-gray-700 px-4 py-3 rounded-xl hover:border-green-600 hover:text-green-600 transition font-semibold text-sm">
+<i class="fas fa-bread-slice mr-2"></i>Keto
+</button>
+<button class="bg-white border-2 border-gray-200 text-gray-700 px-4 py-3 rounded-xl hover:border-green-600 hover:text-green-600 transition font-semibold text-sm">
+<i class="fas fa-heart-pulse mr-2"></i>Low-Carb
+</button>
+</div>
+</div>
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition group cursor-pointer">
+<div class="relative h-64 overflow-hidden">
+<img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=400&fit=crop" alt="Mediterranean Salad" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+<div class="absolute top-4 right-4 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+<i class="fas fa-star mr-1"></i>4.8
+</div>
+<div class="absolute top-4 left-4 bg-white text-gray-900 px-3 py-1 rounded-full text-xs font-semibold">
+<i class="fas fa-leaf text-green-600 mr-1"></i>Vegetarian
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold text-gray-900 mb-2">Mediterranean Quinoa Bowl</h3>
+<p class="text-gray-600 mb-4 text-sm">Fresh vegetables, quinoa, and feta with lemon dressing</p>
+<div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+<div class="flex items-center">
+<i class="fas fa-clock mr-2 text-green-600"></i>
+<span>25 mins</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-fire mr-2 text-green-600"></i>
+<span>320 cal</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-user mr-2 text-green-600"></i>
+<span>2 servings</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="text-sm text-gray-600">
+<i class="fas fa-check-circle text-green-600 mr-1"></i>
+<span class="font-semibold">8/10</span> ingredients available
+</div>
+<button class="text-green-600 hover:text-green-700 font-semibold">
+View Recipe <i class="fas fa-arrow-right ml-1"></i>
+</button>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition group cursor-pointer">
+<div class="relative h-64 overflow-hidden">
+<img src="https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=600&h=400&fit=crop" alt="Chicken Stir Fry" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+<div class="absolute top-4 right-4 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+<i class="fas fa-star mr-1"></i>4.9
+</div>
+<div class="absolute top-4 left-4 bg-white text-gray-900 px-3 py-1 rounded-full text-xs font-semibold">
+<i class="fas fa-drumstick-bite text-orange-600 mr-1"></i>Protein-Rich
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold text-gray-900 mb-2">Asian Chicken Stir Fry</h3>
+<p class="text-gray-600 mb-4 text-sm">Tender chicken with colorful vegetables in savory sauce</p>
+<div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+<div class="flex items-center">
+<i class="fas fa-clock mr-2 text-green-600"></i>
+<span>20 mins</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-fire mr-2 text-green-600"></i>
+<span>380 cal</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-user mr-2 text-green-600"></i>
+<span>4 servings</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="text-sm text-gray-600">
+<i class="fas fa-check-circle text-green-600 mr-1"></i>
+<span class="font-semibold">10/10</span> ingredients available
+</div>
+<button class="text-green-600 hover:text-green-700 font-semibold">
+View Recipe <i class="fas fa-arrow-right ml-1"></i>
+</button>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition group cursor-pointer">
+<div class="relative h-64 overflow-hidden">
+<img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&h=400&fit=crop" alt="Pasta Primavera" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+<div class="absolute top-4 right-4 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+<i class="fas fa-star mr-1"></i>4.7
+</div>
+<div class="absolute top-4 left-4 bg-white text-gray-900 px-3 py-1 rounded-full text-xs font-semibold">
+<i class="fas fa-seedling text-green-600 mr-1"></i>Vegan
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold text-gray-900 mb-2">Creamy Pasta Primavera</h3>
+<p class="text-gray-600 mb-4 text-sm">Fresh seasonal vegetables with creamy cashew sauce</p>
+<div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+<div class="flex items-center">
+<i class="fas fa-clock mr-2 text-green-600"></i>
+<span>30 mins</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-fire mr-2 text-green-600"></i>
+<span>420 cal</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-user mr-2 text-green-600"></i>
+<span>3 servings</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="text-sm text-gray-600">
+<i class="fas fa-check-circle text-green-600 mr-1"></i>
+<span class="font-semibold">7/10</span> ingredients available
+</div>
+<button class="text-green-600 hover:text-green-700 font-semibold">
+View Recipe <i class="fas fa-arrow-right ml-1"></i>
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="text-center mt-12">
+<button class="bg-green-600 text-white px-8 py-4 rounded-xl hover:bg-green-700 transition font-semibold text-lg">
+View All Recipes <i class="fas fa-arrow-right ml-2"></i>
+</button>
+</div>
+</div>
+</section>
+
+<section id="pantry" class="py-16 sm:py-20 bg-gradient-to-br from-gray-50 to-green-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-12">
+<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Smart Pantry Tracker</h2>
+<p class="text-xl text-gray-600 max-w-3xl mx-auto">Keep track of what you have, get expiry alerts, and never waste food again. Our AI suggests recipes based on your inventory.</p>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-8">
+<div class="bg-white rounded-2xl shadow-xl p-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-2xl font-bold text-gray-900">Your Pantry</h3>
+<button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm font-semibold">
+<i class="fas fa-plus mr-2"></i>Add Item
+</button>
+</div>
+
+<div class="mb-6">
+<div class="relative">
+<i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+<input type="text" placeholder="Search your pantry..." class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none">
+</div>
+</div>
+
+<div class="space-y-3 max-h-96 overflow-y-auto">
+<div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+<i class="fas fa-carrot text-orange-600 text-xl"></i>
+</div>
+<div>
+<div class="font-semibold text-gray-900">Carrots</div>
+<div class="text-sm text-gray-500">Expires in 5 days</div>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="text-sm font-semibold text-gray-700">500g</span>
+<button class="text-red-600 hover:text-red-700">
+<i class="fas fa-trash"></i>
+</button>
+</div>
+</div>
+
+<div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+<i class="fas fa-cheese text-yellow-600 text-xl"></i>
+</div>
+<div>
+<div class="font-semibold text-gray-900">Cheddar Cheese</div>
+<div class="text-sm text-gray-500">Expires in 12 days</div>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="text-sm font-semibold text-gray-700">200g</span>
+<button class="text-red-600 hover:text-red-700">
+<i class="fas fa-trash"></i>
+</button>
+</div>
+</div>
+
+<div class="flex items-center justify-between p-4 bg-red-50 rounded-xl border-2 border-red-200">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+<i class="fas fa-drumstick-bite text-red-600 text-xl"></i>
+</div>
+<div>
+<div class="font-semibold text-gray-900">Chicken Breast</div>
+<div class="text-sm text-red-600 font-semibold">
+<i class="fas fa-exclamation-circle mr-1"></i>Expires in 2 days
+</div>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="text-sm font-semibold text-gray-700">800g</span>
+<button class="text-red-600 hover:text-red-700">
+<i class="fas fa-trash"></i>
+</button>
+</div>
+</div>
+
+<div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+<i class="fas fa-leaf text-green-600 text-xl"></i>
+</div>
+<div>
+<div class="font-semibold text-gray-900">Spinach</div>
+<div class="text-sm text-gray-500">Expires in 4 days</div>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="text-sm font-semibold text-gray-700">300g</span>
+<button class="text-red-600 hover:text-red-700">
+<i class="fas fa-trash"></i>
+</button>
+</div>
+</div>
+
+<div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+<i class="fas fa-apple-whole text-red-600 text-xl"></i>
+</div>
+<div>
+<div class="font-semibold text-gray-900">Tomatoes</div>
+<div class="text-sm text-gray-500">Expires in 7 days</div>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="text-sm font-semibold text-gray-700">6 pcs</span>
+<button class="text-red-600 hover:text-red-700">
+<i class="fas fa-trash"></i>
+</button>
+</div>
+</div>
+
+<div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+<i class="fas fa-wheat-awn text-amber-600 text-xl"></i>
+</div>
+<div>
+<div class="font-semibold text-gray-900">Pasta</div>
+<div class="text-sm text-gray-500">Expires in 180 days</div>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="text-sm font-semibold text-gray-700">1kg</span>
+<button class="text-red-600 hover:text-red-700">
+<i class="fas fa-trash"></i>
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="space-y-6">
+<div class="bg-gradient-to-br from-green-600 to-green-700 rounded-2xl shadow-xl p-8 text-white">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-2xl font-bold">Pantry Insights</h3>
+<i class="fas fa-chart-line text-3xl opacity-50"></i>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-white bg-opacity-20 rounded-xl p-4">
+<div class="text-3xl font-bold mb-1">24</div>
+<div class="text-sm opacity-90">Total Items</div>
+</div>
+<div class="bg-white bg-opacity-20 rounded-xl p-4">
+<div class="text-3xl font-bold mb-1">3</div>
+<div class="text-sm opacity-90">Expiring Soon</div>
+</div>
+</div>
+<div class="bg-white bg-opacity-20 rounded-xl p-4">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold">Pantry Fullness</span>
+<span class="text-sm font-bold">68%</span>
+</div>
+<div class="w-full bg-white bg-opacity-30 rounded-full h-3">
+<div class="bg-white rounded-full h-3" style="width: 68%"></div>
+</div>
+</div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-xl p-8">
+<h3 class="text-xl font-bold text-gray-900 mb-4">
+<i class="fas fa-lightbulb text-yellow-500 mr-2"></i>Smart Suggestions
+</h3>
+<div class="space-y-4">
+<div class="flex items-start space-x-3 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+<i class="fas fa-exclamation-triangle text-yellow-600 mt-1"></i>
+<div>
+<div class="font-semibold text-gray-900 mb-1">Use Chicken Soon!</div>
+<div class="text-sm text-gray-600">Your chicken expires in 2 days. Try our Asian Chicken Stir Fry recipe.</div>
+<button class="text-green-600 hover:text-green-700 text-sm font-semibold mt-2">
+View Recipe <i class="fas fa-arrow-right ml-1"></i>
+</button>
+</div>
+</div>
+<div class="flex items-start space-x-3 p-4 bg-green-50 rounded-xl border border-green-200">
+<i class="fas fa-leaf text-green-600 mt-1"></i>
+<div>
+<div class="font-semibold text-gray-900 mb-1">Perfect Match Found!</div>
+<div class="text-sm text-gray-600">You have all ingredients for Mediterranean Quinoa Bowl.</div>
+<button class="text-green-600 hover:text-green-700 text-sm font-semibold mt-2">
+Cook Now <i class="fas fa-arrow-right ml-1"></i>
+</button>
+</div>
+</div>
+<div class="flex items-start space-x-3 p-4 bg-blue-50 rounded-xl border border-blue-200">
+<i class="fas fa-shopping-cart text-blue-600 mt-1"></i>
+<div>
+<div class="font-semibold text-gray-900 mb-1">Low on Essentials</div>
+<div class="text-sm text-gray-600">Consider restocking: eggs, milk, bread.</div>
+<button class="text-green-600 hover:text-green-700 text-sm font-semibold mt-2">
+Add to Grocery List <i class="fas fa-arrow-right ml-1"></i>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="py-16 sm:py-20 bg-white">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl shadow-2xl overflow-hidden">
+<div class="grid lg:grid-cols-2">
+<div class="p-8 sm:p-12">
+<div class="inline-block bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+Recipe Detail Example
+</div>
+<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Mediterranean Quinoa Bowl</h2>
+<div class="flex items-center space-x-6 mb-6 text-sm text-gray-600">
+<div class="flex items-center">
+<i class="fas fa-clock text-green-600 mr-2"></i>
+<span>25 mins</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-user text-green-600 mr-2"></i>
+<span>2 servings</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-star text-yellow-500 mr-2"></i>
+<span>4.8 (124 reviews)</span>
+</div>
+</div>
+<p class="text-gray-700 mb-6">A nutritious and colorful bowl packed with protein-rich quinoa, fresh vegetables, creamy feta cheese, and a zesty lemon dressing. Perfect for meal prep!</p>
+<div class="flex flex-wrap gap-3 mb-8">
+<span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
+<i class="fas fa-leaf mr-1"></i>Vegetarian
+</span>
+<span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
+<i class="fas fa-wheat-awn mr-1"></i>Gluten-Free
+</span>
+<span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-semibold">
+<i class="fas fa-heart mr-1"></i>Heart Healthy
+</span>
+</div>
+<div class="flex flex-wrap gap-4">
+<button class="bg-green-600 text-white px-8 py-4 rounded-xl hover:bg-green-700 transition font-semibold">
+<i class="fas fa-utensils mr-2"></i>Start Cooking
+</button>
+<button class="bg-white text-gray-900 px-8 py-4 rounded-xl hover:bg-gray-50 transition font-semibold border-2 border-gray-200">
+<i class="fas fa-bookmark mr-2"></i>Save Recipe
+</button>
+</div>
+</div>
+<div class="relative h-full min-h-80">
+<img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=800&fit=crop" alt="Mediterranean Quinoa Bowl" class="w-full h-full object-cover">
+</div>
+</div>
+
+<div class="p-8 sm:p-12 bg-white">
+<div class="mb-8">
+<h3 class="text-2xl font-bold text-gray-900 mb-6">Ingredients</h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+<div class="flex items-center space-x-3">
+<input type="checkbox" class="w-5 h-5 text-green-600 rounded">
+<span class="text-gray-900">1 cup quinoa</span>
+</div>
+<span class="text-sm text-green-600 font-semibold">
+<i class="fas fa-check-circle mr-1"></i>In pantry
+</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+<div class="flex items-center space-x-3">
+<input type="checkbox" class="w-5 h-5 text-green-600 rounded">
+<span class="text-gray-900">2 cups cherry tomatoes</span>
+</div>
+<span class="text-sm text-green-600 font-semibold">
+<i class="fas fa-check-circle mr-1"></i>In pantry
+</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+<div class="flex items-center space-x-3">
+<input type="checkbox" class="w-5 h-5 text-green-600 rounded">
+<span class="text-gray-900">1 cucumber, diced</span>
+</div>
+<span class="text-sm text-green-600 font-semibold">
+<i class="fas fa-check-circle mr-1"></i>In pantry
+</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+<div class="flex items-center space-x-3">
+<input type="checkbox" class="w-5 h-5 text-green-600 rounded">
+<span class="text-gray-900">100g feta cheese</span>
+</div>
+<span class="text-sm text-red-600 font-semibold">
+<i class="fas fa-shopping-cart mr-1"></i>Need to buy
+</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+<div class="flex items-center space-x-3">
+<input type="checkbox" class="w-5 h-5 text-green-600 rounded">
+<span class="text-gray-900">1/4 cup olive oil</span>
+</div>
+<span class="text-sm text-green-600 font-semibold">
+<i class="fas fa-check-circle mr-1"></i>In pantry
+</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+<div class="flex items-center space-x-3">
+<input type="checkbox" class="w-5 h-5 text-green-600 rounded">
+<span class="text-gray-900">2 lemons, juiced</span>
+</div>
+<span class="text-sm text-green-600 font-semibold">
+<i class="fas fa-check-circle mr-1"></i>In pantry
+</span>
+</div>
+</div>
+<button class="w-full mt-4 bg-green-50 text-green-700 px-6 py-3 rounded-xl hover:bg-green-100 transition font-semibold border-2 border-green-200">
+<i class="fas fa-shopping-cart mr-2"></i>Add Missing Items to Grocery List
+</button>
+</div>
+
+<div class="mb-8">
+<h3 class="text-2xl font-bold text-gray-900 mb-6">Instructions</h3>
+<div class="space-y-4">
+<div class="flex space-x-4">
+<div class="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+<div>
+<p class="text-gray-900 font-semibold mb-1">Cook the quinoa</p>
+<p class="text-gray-600 text-sm">Rinse quinoa and cook according to package instructions. Let cool.</p>
+</div>
+</div>
+<div class="flex space-x-4">
+<div class="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+<div>
+<p class="text-gray-900 font-semibold mb-1">Prepare vegetables</p>
+<p class="text-gray-600 text-sm">Dice cucumber, halve cherry tomatoes, and crumble feta cheese.</p>
+</div>
+</div>
+<div class="flex space-x-4">
+<div class="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+<div>
+<p class="text-gray-900 font-semibold mb-1">Make dressing</p>
+<p class="text-gray-600 text-sm">Whisk together olive oil, lemon juice, salt, and pepper.</p>
+</div>
+</div>
+<div class="flex space-x-4">
+<div class="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
+<div>
+<p class="text-gray-900 font-semibold mb-1">Combine and serve</p>
+<p class="text-gray-600 text-sm">Mix quinoa with vegetables, top with feta, and drizzle with dressing.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6">
+<h3 class="text-xl font-bold text-gray-900 mb-4">Nutrition Facts</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white rounded-xl p-4 text-center">
+<div class="text-3xl font-bold text-green-600 mb-1">320</div>
+<div class="text-sm text-gray-600">Calories</div>
+</div>
+<div class="bg-white rounded-xl p-4 text-center">
+<div class="text-3xl font-bold text-green-600 mb-1">12g</div>
+<div class="text-sm text-gray-600">Protein</div>
+</div>
+<div class="bg-white rounded-xl p-4 text-center">
+<div class="text-3xl font-bold text-green-600 mb-1">42g</div>
+<div class="text-sm text-gray-600">Carbs</div>
+</div>
+<div class="bg-white rounded-xl p-4 text-center">
+<div class="text-3xl font-bold text-green-600 mb-1">14g</div>
+<div class="text-sm text-gray-600">Fat</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="dashboard" class="py-16 sm:py-20 bg-gray-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-12">
+<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Your Personal Dashboard</h2>
+<p class="text-xl text-gray-600 max-w-3xl mx-auto">Track your cooking journey, manage saved recipes, monitor your pantry inventory, and achieve your sustainability goals.</p>
+</div>
+
+<div class="grid lg:grid-cols-3 gap-8 mb-8">
+<div class="bg-gradient-to-br from-green-600 to-green-700 rounded-2xl shadow-xl p-8 text-white">
+<div class="flex items-center justify-between mb-4">
+<div>
+<div class="text-sm opacity-90 mb-1">Recipes Cooked</div>
+<div class="text-4xl font-bold">47</div>
+</div>
+<div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center">
+<i class="fas fa-utensils text-3xl"></i>
+</div>
+</div>
+<div class="flex items-center text-sm">
+<i class="fas fa-arrow-up mr-2"></i>
+<span>12% from last month</span>
+</div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-xl p-8">
+<div class="flex items-center justify-between mb-4">
+<div>
+<div class="text-sm text-gray-600 mb-1">Food Waste Saved</div>
+<div class="text-4xl font-bold text-gray-900">8.2kg</div>
+</div>
+<div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center">
+<i class="fas fa-leaf text-green-600 text-3xl"></i>
+</div>
+</div>
+<div class="flex items-center text-sm text-green-600">
+<i class="fas fa-arrow-up mr-2"></i>
+<span>18% from last month</span>
+</div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-xl p-8">
+<div class="flex items-center justify-between mb-4">
+<div>
+<div class="text-sm text-gray-600 mb-1">Saved Recipes</div>
+<div class="text-4xl font-bold text-gray-900">23</div>
+</div>
+<div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
+<i class="fas fa-bookmark text-blue-600 text-3xl"></i>
+</div>
+</div>
+<div class="flex items-center text-sm text-blue-600">
+<i class="fas fa-plus mr-2"></i>
+<span>5 new this week</span>
+</div>
+</div>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-8">
+<div class="bg-white rounded-2xl shadow-xl p-8">
+<h3 class="text-xl font-bold text-gray-900 mb-6">Your Saved Recipes</h3>
+<div class="space-y-4">
+<div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+<img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&h=100&fit=crop" alt="Recipe" class="w-16 h-16 rounded-lg object-cover">
+<div class="flex-1">
+<div class="font-semibold text-gray-900">Mediterranean Quinoa Bowl</div>
+<div class="text-sm text-gray-500">Saved 2 days ago</div>
+</div>
+<button class="text-green-600 hover:text-green-700">
+<i class="fas fa-arrow-right"></i>
+</button>
+</div>
+<div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+<img src="https://images.unsplash.com/photo-1588137378633-dea1336ce1e2?w=100&h=100&fit=crop" alt="Recipe" class="w-16 h-16 rounded-lg object-cover">
+<div class="flex-1">
+<div class="font-semibold text-gray-900">Asian Chicken Stir Fry</div>
+<div class="text-sm text-gray-500">Saved 5 days ago</div>
+</div>
+<button class="text-green-600 hover:text-green-700">
+<i class="fas fa-arrow-right"></i>
+</button>
+</div>
+<div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+<img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=100&h=100&fit=crop" alt="Recipe" class="w-16 h-16 rounded-lg object-cover">
+<div class="flex-1">
+<div class="font-semibold text-gray-900">Creamy Pasta Primavera</div>
+<div class="text-sm text-gray-500">Saved 1 week ago</div>
+</div>
+<button class="text-green-600 hover:text-green-700">
+<i class="fas fa-arrow-right"></i>
+</button>
+</div>
+</div>
+<button class="w-full mt-4 text-green-600 hover:text-green-700 font-semibold">
+View All Saved Recipes <i class="fas fa-arrow-right ml-2"></i>
+</button>
+</div>
+
+<div class="bg-white rounded-2xl shadow-xl p-8">
+<h3 class="text-xl font-bold text-gray-900 mb-6">Cooking Activity</h3>
+<div class="h-64 overflow-hidden">
+<canvas id="activityChart"></canvas>
+</div>
+<div class="grid grid-cols-3 gap-4 mt-6">
+<div class="text-center">
+<div class="text-2xl font-bold text-gray-900">12</div>
+<div class="text-sm text-gray-600">This Week</div>
+</div>
+<div class="text-center">
+<div class="text-2xl font-bold text-gray-900">47</div>
+<div class="text-sm text-gray-600">This Month</div>
+</div>
+<div class="text-center">
+<div class="text-2xl font-bold text-gray-900">156</div>
+<div class="text-sm text-gray-600">All Time</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="grocery" class="py-16 sm:py-20 bg-white">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-12">
+<h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Seamless Grocery Integration</h2>
+<p class="text-xl text-gray-600 max-w-3xl mx-auto">Connect with your favorite grocery stores and get ingredients delivered. Smart lists automatically sync with your meal plans.</p>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-12 items-center">
+<div>
+<div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-2xl font-bold text-gray-900">Your Grocery List</h3>
+<button class="text-green-600 hover:text-green-700 font-semibold text-sm">
+<i class="fas fa-edit mr-2"></i>Edit
+</button>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+<div class="flex items-center space-x-3">
+<input type="checkbox" class="w-5 h-5 text-green-600 rounded">
+<span class="text-gray-900">Feta Cheese (100g)</span>
+</div>
+<span class="text-sm text-gray-600">$4.99</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+<div class="flex items-center space-x-3">
+<input type="checkbox" class="w-5 h-5 text-green-600 rounded">
+<span class="text-gray-900">Fresh Basil (1 bunch)</span>
+</div>
+<span class="text-sm text-gray-600">$2.49</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+<div class="flex items-center space-x-3">
+<input type="checkbox" class="w-5 h-5 text-green-600 rounded">
+<span class="text-gray-900">Organic Eggs (12 pcs)</span>
+</div>
+<span class="text-sm text-gray-600">$5.99</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+<div class="flex items-center space-x-3">
+<input type="checkbox" class="w-5 h-5 text-green-600 rounded">
+<span class="text-gray-900">Almond Milk (1L)</span>
+</div>
+<span class="text-sm text-gray-600">$3.99</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+<div class="flex items-center space-x-3">
+<input type="checkbox" class="w-5 h-5 text-green-600 rounded">
+<span class="text-gray-900">Whole Wheat Bread</span>
+</div>
+<span class="text-sm text-gray-600">$3.49</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-green-50 rounded-xl border-2 border-green-200 mb-6">
+<div>
+<div class="text-sm text-gray-600 mb-1">Estimated Total</div>
+<div class="text-2xl font-bold text-gray-900">$20.95</div>
+</div>
+<button class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-semibold">
+<i class="fas fa-shopping-cart mr-2"></i>Checkout
+</button>
+</div>
+</div>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<button class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition text-center">
+<img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=100&h=100&fit=crop" alt="Store" class="w-16 h-16 rounded-lg mx-auto mb-3 object-cover">
+<div class="font-semibold text-gray-900 text-sm">Whole Foods</div>
+</button>
+<button class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition text-center">
+<img src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=100&h=100&fit=crop" alt="Store" class="w-16 h-16 rounded-lg mx-auto mb-3 object-cover">
+<div class="font-semibold text-gray-900 text-sm">Trader Joe's</div>
+</button>
+<button class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition text-center">
+<img src="https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8?w=100&h=100&fit=crop" alt="Store" class="w-16 h-16 rounded-lg mx-auto mb-3 object-cover">
+<div class="font-semibold text-gray-900 text-sm">Walmart</div>
+</button>
+<button class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition text-center">
+<img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=100&h=100&fit=crop" alt="Store" class="w-16 h-16 rounded-lg mx-auto mb-3 object-cover">
+<div class="font-semibold text-gray-900 text-sm">Target</div>
+</button>
+</div>
+</div>
+
+<div class="space-y-6">
+<div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8">
+<div class="flex items-start space-x-4 mb-6">
+<div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+<i class="fas fa-truck text-white text-xl"></i>
+</div>
+<div>
+<h3 class="text-xl font-bold text-gray-900 mb-2">Smart Delivery Options</h3>
+<p class="text-gray-700">Choose same-day delivery, pickup, or schedule for later. We partner with major grocery chains for seamless integration.</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white rounded-xl p-4">
+<div class="text-sm text-gray-600 mb-1">Delivery Time</div>
+<div class="font-bold text-gray-900">2-4 hours</div>
+</div>
+<div class="bg-white rounded-xl p-4">
+<div class="text-sm text-gray-600 mb-1">Delivery Fee</div>
+<div class="font-bold text-gray-900">$4.99</div>
+</div>
+</div>
+</div>
+
+<div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8">
+<div class="flex items-start space-x-4 mb-6">
+<div class="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+<i class="fas fa-magic text-white text-xl"></i>
+</div>
+<div>
+<h3 class="text-xl font-bold text-gray-900 mb-2">Auto-Generated Lists</h3>
+<p class="text-gray-700">Your grocery list automatically updates based on meal plans and pantry inventory. Never forget an ingredient again.</p>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<i class="fas fa-check-circle text-purple-600"></i>
+<span class="text-sm text-gray-700">Syncs with meal plans</span>
+</div>
+<div class="flex items-center space-x-3 mt-2">
+<i class="fas fa-check-circle text-purple-600"></i>
+<span class="text-sm text-gray-700">Updates with pantry changes</span>
+</div>
+</div>
+
+<div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8">
+<div class="flex items-start space-x-4">
+<div class="w-12 h-12 bg-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
+<i class="fas fa-tags text-white text-xl"></i>
+</div>
+<div>
+<h3 class="text-xl font-bold text-gray-900 mb-2">Smart Savings</h3>
+<p class="text-gray-700">Get notified of deals on items in your list. Compare prices across stores and save money on every shop.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="py-16 sm:py-20 bg-gradient-to-br from-green-600 to-emerald-700 text-white">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-12">
+<div class="inline-block bg-white bg-opacity-20 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+<i class="fas fa-leaf mr-2"></i>Sustainability Mission
+</div>
+<h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Reduce Food Waste, Save the Planet</h2>
+<p class="text-xl opacity-90 max-w-3xl mx-auto">Join thousands of home cooks making a difference. Every meal planned is a step toward a more sustainable future.</p>
+</div>
+
+<div class="grid md:grid-cols-3 gap-8 mb-12">
+<div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-8 text-center">
+<div class="w-20 h-20 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+<i class="fas fa-recycle text-5xl"></i>
+</div>
+<div class="text-4xl font-bold mb-2">40%</div>
+<div class="text-lg opacity-90">Food Waste Reduction</div>
+<p class="text-sm opacity-75 mt-3">Average reduction in household food waste for our active users</p>
+</div>
+
+<div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-8 text-center">
+<div class="w-20 h-20 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+<i class="fas fa-globe text-5xl"></i>
+</div>
+<div class="text-4xl font-bold mb-2">2.5M kg</div>
+<div class="text-lg opacity-90">Food Saved Collectively</div>
+<p class="text-sm opacity-75 mt-3">Total food waste prevented by our community this year</p>
+</div>
+
+<div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-8 text-center">
+<div class="w-20 h-20 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+<i class="fas fa-tree text-5xl"></i>
+</div>
+<div class="text-4xl font-bold mb-2">50K</div>
+<div class="text-lg opacity-90">Trees Equivalent</div>
+<p class="text-sm opacity-75 mt-3">Carbon offset equivalent to planting 50,000 trees annually</p>
+</div>
+</div>
+
+<div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl p-8 md:p-12">
+<div class="grid md:grid-cols-2 gap-8 items-center">
+<div>
+<h3 class="text-2xl font-bold mb-4">Our Eco-Friendly Commitment</h3>
+<div class="space-y-4">
+<div class="flex items-start space-x-3">
+<i class="fas fa-check-circle text-2xl mt-1"></i>
+<div>
+<div class="font-semibold mb-1">Smart Expiry Tracking</div>
+<div class="text-sm opacity-90">Get alerts before food expires and recipe suggestions to use ingredients in time</div>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<i class="fas fa-check-circle text-2xl mt-1"></i>
+<div>
+<div class="font-semibold mb-1">Zero-Waste Recipes</div>
+<div class="text-sm opacity-90">Discover creative ways to use leftovers and reduce kitchen waste</div>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<i class="fas fa-check-circle text-2xl mt-1"></i>
+<div>
+<div class="font-semibold mb-1">Sustainable Shopping</div>
+<div class="text-sm opacity-90">Buy only what you need with AI-powered portion planning</div>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<i class="fas fa-check-circle text-2xl mt-1"></i>
+<div>
+<div class="font-semibold mb-1">Impact Tracking</div>
+<div class="text-sm opacity-90">See your personal contribution to reducing food waste over time</div>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&h=600&fit=crop" alt="Sustainable cooking" class="rounded-2xl shadow-2xl">
+<div class="absolute -bottom-6 -right-6 bg-white text-gray-900 rounded-xl shadow-xl p-6 hidden md:block">
+<div class="text-3xl font-bold text-green-600 mb-1">8.2kg</div>
+<div class="text-sm text-gray-600">Your Impact</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="py-16 sm:py-20 bg-gray-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="bg-gradient-to-br from-green-600 to-emerald-700 rounded-3xl shadow-2xl overflow-hidden">
+<div class="grid lg:grid-cols-2 gap-12 items-center p-8 sm:p-12 lg:p-16">
+<div class="text-white">
+<h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Start Your Sustainable Cooking Journey Today</h2>
+<p class="text-xl opacity-90 mb-8">Join over 100,000 home cooks who are reducing food waste, saving money, and cooking delicious meals with MealGenie.</p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-white text-green-600 px-8 py-4 rounded-xl hover:bg-gray-100 transition font-semibold text-lg">
+<i class="fas fa-rocket mr-2"></i>Get Started Free
+</button>
+<button class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl hover:bg-white hover:text-green-600 transition font-semibold text-lg">
+<i class="fas fa-play-circle mr-2"></i>Watch Demo
+</button>
+</div>
+<div class="flex items-center space-x-6 mt-8 text-sm">
+<div class="flex items-center">
+<i class="fas fa-check-circle mr-2"></i>
+<span>Free forever</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-check-circle mr-2"></i>
+<span>No credit card</span>
+</div>
+<div class="flex items-center">
+<i class="fas fa-check-circle mr-2"></i>
+<span>Cancel anytime</span>
+</div>
+</div>
+</div>
+<div class="relative hidden lg:block">
+<img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=600&h=700&fit=crop" alt="Cooking" class="rounded-2xl shadow-2xl">
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer class="bg-gray-900 text-white py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid md:grid-cols-4 gap-8 mb-8">
+<div>
+<div class="flex items-center space-x-2 mb-4">
+<div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+<i class="fas fa-leaf text-white text-xl"></i>
+</div>
+<span class="text-2xl font-bold">MealGenie</span>
+</div>
+<p class="text-gray-400 text-sm">Smart recipe discovery and meal planning for a sustainable future.</p>
+</div>
+<div>
+<h4 class="font-semibold mb-4">Product</h4>
+<ul class="space-y-2 text-sm text-gray-400">
+<li><a href="#" class="hover:text-white transition">Features</a></li>
+<li><a href="#" class="hover:text-white transition">Pricing</a></li>
+<li><a href="#" class="hover:text-white transition">Recipes</a></li>
+<li><a href="#" class="hover:text-white transition">Meal Plans</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-semibold mb-4">Company</h4>
+<ul class="space-y-2 text-sm text-gray-400">
+<li><a href="#" class="hover:text-white transition">About Us</a></li>
+<li><a href="#" class="hover:text-white transition">Blog</a></li>
+<li><a href="#" class="hover:text-white transition">Careers</a></li>
+<li><a href="#" class="hover:text-white transition">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-semibold mb-4">Connect</h4>
+<div class="flex space-x-4">
+<a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-green-600 transition">
+<i class="fab fa-facebook-f"></i>
+</a>
+<a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-green-600 transition">
+<i class="fab fa-twitter"></i>
+</a>
+<a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-green-600 transition">
+<i class="fab fa-instagram"></i>
+</a>
+<a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-green-600 transition">
+<i class="fab fa-youtube"></i>
+</a>
+</div>
+</div>
+</div>
+<div class="border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400">
+<p>&copy; 2024 MealGenie. All rights reserved.</p>
+<div class="flex space-x-6 mt-4 sm:mt-0">
+<a href="#" class="hover:text-white transition">Privacy Policy</a>
+<a href="#" class="hover:text-white transition">Terms of Service</a>
+<a href="#" class="hover:text-white transition">Cookie Policy</a>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+const ctx = document.getElementById('activityChart');
+if (ctx) {
+new Chart(ctx, {
+type: 'line',
+data: {
+labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+datasets: [{
+label: 'Recipes Cooked',
+data: [2, 1, 3, 2, 4, 3, 2],
+borderColor: '#16a34a',
+backgroundColor: 'rgba(22, 163, 74, 0.1)',
+tension: 0.4,
+fill: true
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: {
+legend: {
+display: false
+}
+},
+scales: {
+y: {
+beginAtZero: true,
+ticks: {
+stepSize: 1
+}
+}
+}
+}
+});
+}
+</script>
+
+</body>
+</html>

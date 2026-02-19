@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MealGenie - Register</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen flex items-center justify-center px-4">
+
+<!-- Success Toast -->
+<div id="successToast" class="fixed top-6 inset-x-0 flex justify-center z-50 hidden">
+  <div class="bg-green-600 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2 text-sm">
+    <span class="text-lg">✔</span>
+    <span id="successToastMsg">Account created successfully!</span>
+  </div>
+</div>
+
+<div class="max-w-lg w-full bg-white rounded-3xl shadow-2xl p-10 transform transition duration-300 hover:shadow-3xl">
+  
+  <!-- Logo -->
+  <div class="flex justify-center mb-6">
+    <img src="assets/mealgenie_logo.png" class="h-20 object-contain" alt="MealGenie">
+  </div>
+
+  <h2 class="text-4xl font-bold text-center text-gray-900 mb-4">
+    Create Your MealGenie Account
+  </h2>
+  <p class="text-center text-gray-600 mb-8">
+    Join MealGenie and start cooking smarter today!
+  </p>
+
+  <!-- Name -->
+  <div class="mb-4">
+    <label class="text-gray-700 font-semibold mb-1 block">Name</label>
+    <input
+      id="name"
+      class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-600 focus:outline-none"
+      placeholder="Enter your name"
+    />
+  </div>
+
+  <!-- Email -->
+  <div class="mb-4">
+    <label class="text-gray-700 font-semibold mb-1 block">Email</label>
+    <input
+      id="email"
+      type="email"
+      class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-600 focus:outline-none"
+      placeholder="Enter your email"
+    />
+  </div>
+
+  <!-- Password -->
+  <div class="mb-4">
+    <label class="text-gray-700 font-semibold mb-1 block">Password</label>
+    <div class="relative">
+      <input
+        id="password"
+        type="password"
+        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-600 focus:outline-none pr-11"
+        placeholder="Create a password (min 6 characters)"
+      />
+      <button
+        type="button"
+        onclick="togglePassword('password', 'pwdEye')"
+        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+      >
+        <span id="pwdEye">👁️</span>
+      </button>
+    </div>
+    <p id="passwordHint" class="text-xs text-gray-500 mt-1">
+      Use at least 6 characters for a stronger password.
+    </p>
+  </div>
+
+  <!-- Confirm Password -->
+  <div class="mb-2">
+    <label class="text-gray-700 font-semibold mb-1 block">Re-type Password</label>
+    <div class="relative">
+      <input
+        id="confirmPassword"
+        type="password"
+        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none pr-11"
+        placeholder="Re-enter your password"
+        oninput="validateConfirmPassword()"
+      />
+      <button
+        type="button"
+        onclick="togglePassword('confirmPassword', 'cpwdEye')"
+        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+      >
+        <span id="cpwdEye">👁️</span>
+      </button>
+    </div>
+    <p id="confirmError" class="text-xs mt-1 text-red-500 hidden">
+      Passwords do not match.
+    </p>
+    <p id="confirmSuccess" class="text-xs mt-1 text-green-600 hidden">
+      ✔ Passwords match.
+    </p>
+  </div>
+
+  <!-- Register Button -->
+  <button
+    id="registerBtn"
+    onclick="registerUser()"
+    class="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold text-lg transition transform hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2"
+  >
+    <span id="registerBtnSpinner" class="hidden w-5 h-5 border-2 border-white border-top-transparent border-t-transparent rounded-full animate-spin"></span>
+    <span id="registerBtnText">Sign Up</span>
+  </button>
+
+  <!-- Error Message -->
+  <p id="result" class="text-center text-red-500 font-semibold mt-4 text-sm"></p>
+
+  <!-- Divider -->
+  <div class="flex items-center my-6">
+    <div class="flex-1 h-px bg-gray-200"></div>
+    <span class="px-3 text-gray-400 text-sm">or</span>
+    <div class="flex-1 h-px bg-gray-200"></div>
+  </div>
+
+  <!-- Google Button -->
+  <button
+    type="button"
+    onclick="googleLogin()"
+    class="w-full border-2 border-gray-200 hover:border-green-600 text-gray-700 py-3 rounded-xl font-semibold flex items-center justify-center gap-3 transition bg-white"
+  >
+    <img
+      src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+      alt="Google"
+      class="w-5 h-5"
+    />
+    <span>Sign up with Google</span>
+  </button>
+
+  <!-- Login link -->
+  <p class="text-center text-gray-700 text-sm mt-6">
+    Already have an account?
+    <a href="login.html" class="text-green-600 font-semibold hover:underline">
+      Login here
+    </a>
+  </p>
+</div>
+
+<script>
+function togglePassword(inputId, eyeId) {
+  const input = document.getElementById(inputId);
+  const eye = document.getElementById(eyeId);
+  if (input.type === "password") {
+    input.type = "text";
+    eye.textContent = "🙈";
+  } else {
+    input.type = "password";
+    eye.textContent = "👁️";
+  }
+}
+
+function showSuccessToast(message) {
+  const toast = document.getElementById("successToast");
+  const msg = document.getElementById("successToastMsg");
+  msg.textContent = message;
+  toast.classList.remove("hidden");
+  setTimeout(() => {
+    toast.classList.add("hidden");
+  }, 1800);
+}
+
+function setLoading(isLoading) {
+  const btn = document.getElementById("registerBtn");
+  const spinner = document.getElementById("registerBtnSpinner");
+  const text = document.getElementById("registerBtnText");
+  if (isLoading) {
+    btn.disabled = true;
+    spinner.classList.remove("hidden");
+    text.textContent = "Creating account...";
+  } else {
+    btn.disabled = false;
+    spinner.classList.add("hidden");
+    text.textContent = "Sign Up";
+  }
+}
+
+function validateConfirmPassword() {
+  const pwd = document.getElementById("password").value;
+  const cpwd = document.getElementById("confirmPassword").value;
+  const err = document.getElementById("confirmError");
+  const ok = document.getElementById("confirmSuccess");
+
+  if (!cpwd) {
+    err.classList.add("hidden");
+    ok.classList.add("hidden");
+    return;
+  }
+
+  if (pwd === cpwd) {
+    err.classList.add("hidden");
+    ok.classList.remove("hidden");
+  } else {
+    ok.classList.add("hidden");
+    err.classList.remove("hidden");
+  }
+}
+
+async function registerUser() {
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+  const resultBox = document.getElementById("result");
+
+  resultBox.textContent = "";
+
+  if (!name || !email || !password || !confirmPassword) {
+    resultBox.textContent = "Please fill in all fields.";
+    return;
+  }
+
+  if (password.length < 6) {
+    resultBox.textContent = "Password must be at least 6 characters.";
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    resultBox.textContent = "Passwords do not match.";
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const res = await fetch("http://localhost:5000/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password })
+    });
+
+    const data = await res.json();
+
+    if (res.status === 201 || res.status === 200) {
+      showSuccessToast("Account created! Redirecting to login...");
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1200);
+    } else {
+      resultBox.textContent = data.message || "Registration failed.";
+    }
+  } catch (err) {
+    console.error(err);
+    resultBox.textContent = "Server error. Try again later.";
+  } finally {
+    setLoading(false);
+  }
+}
+
+function googleLogin() {
+  alert("Google Sign-up integration coming soon ✨");
+}
+</script>
+
+</body>
+</html>
